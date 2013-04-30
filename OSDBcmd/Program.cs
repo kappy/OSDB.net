@@ -62,6 +62,8 @@ namespace OSDBcmd {
 
 		static void DownloadSubtitle(string movieFileName, bool lucky, IList<string> languages) {
 			var systemLanguage = GetSystemLanguage();
+			if (!languages.Contains(systemLanguage)) 
+		        	languages.Add(systemLanguage);
 			using (var osdb = Osdb.Login(systemLanguage, "OS Test User Agent")) {
 				var subtitles = osdb.SearchSubtitlesFromFile(languages.Aggregate( (a,b) => a + "," +b ),movieFileName);
 
