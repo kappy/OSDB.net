@@ -82,7 +82,7 @@ namespace OSDBcmd
             var systemLanguage = GetSystemLanguage();
             if (!languages.Contains(systemLanguage))
                 languages.Add(systemLanguage);
-            using (var osdb = await new Osdb().Login(systemLanguage, "OS Test User Agent"))
+            using (var osdb = await new Osdb().Login(systemLanguage, "Popcorn v1.0"))
             {
                 var subtitles =
                     await osdb.SearchSubtitlesFromFile(languages.Aggregate((a, b) => a + "," + b), movieFileName);
