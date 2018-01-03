@@ -290,7 +290,7 @@ namespace OSDBnet
 
                     var comments = new List<UserComment>();
                     var commentsStruct = response.data as XmlRpcStruct;
-                    if (!(commentsStruct != null))
+                    if (commentsStruct == null)
                     {
                         tcs.TrySetResult(comments);
                         return;
@@ -334,7 +334,7 @@ namespace OSDBnet
                     VerifyResponseCode(response);
 
                     var languagesStruct = response.data as XmlRpcStruct;
-                    if (!(languagesStruct != null))
+                    if (languagesStruct == null)
                     {
                         tcs.TrySetResult(null);
                         return;
