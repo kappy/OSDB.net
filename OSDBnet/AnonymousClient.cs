@@ -131,7 +131,8 @@ namespace OSDBnet
                     VerifyResponseCode(response);
 
                     long idSubtitleFile = 0;
-                    if (response.data is XmlRpcStruct hashInfo && hashInfo.ContainsKey(subHash))
+                    var hashInfo = response.data as XmlRpcStruct;
+                    if (hashInfo != null && hashInfo.ContainsKey(subHash))
                     {
                         idSubtitleFile = Convert.ToInt64(hashInfo[subHash]);
                     }
@@ -159,9 +160,11 @@ namespace OSDBnet
 
                     var movieInfoList = new List<MovieInfo>();
 
-                    if (response.data is XmlRpcStruct hashInfo && hashInfo.ContainsKey(moviehash))
+                    var hashInfo = response.data as XmlRpcStruct;
+                    if (hashInfo != null && hashInfo.ContainsKey(moviehash))
                     {
-                        if (hashInfo[moviehash] is object[] movieInfoArray)
+                        var movieInfoArray = hashInfo[moviehash] as object[];
+                        if (movieInfoArray != null)
                         {
                             foreach (XmlRpcStruct movieInfoStruct in movieInfoArray)
                             {
@@ -286,7 +289,8 @@ namespace OSDBnet
                     VerifyResponseCode(response);
 
                     var comments = new List<UserComment>();
-                    if (!(response.data is XmlRpcStruct commentsStruct))
+                    var commentsStruct = response.data as XmlRpcStruct;
+                    if (!(commentsStruct != null))
                     {
                         tcs.TrySetResult(comments);
                         return;
@@ -294,7 +298,8 @@ namespace OSDBnet
 
                     if (commentsStruct.ContainsKey("_" + idsubtitle))
                     {
-                        if (commentsStruct["_" + idsubtitle] is object[] commentsList)
+                        var commentsList = commentsStruct["_" + idsubtitle] as object[];
+                        if (commentsList != null)
                         {
                             foreach (XmlRpcStruct commentStruct in commentsList)
                             {
@@ -328,7 +333,8 @@ namespace OSDBnet
                     var response = Proxy.DetectLanguage(Token, new[] {text});
                     VerifyResponseCode(response);
 
-                    if (!(response.data is XmlRpcStruct languagesStruct))
+                    var languagesStruct = response.data as XmlRpcStruct;
+                    if (!(languagesStruct != null))
                     {
                         tcs.TrySetResult(null);
                         return;
@@ -556,7 +562,8 @@ namespace OSDBnet
                     VerifyResponseCode(response);
 
                     var subtitles = new List<Subtitle>();
-                    if (response.data is object[] subtitlesInfo)
+                    var subtitlesInfo = response.data as object[];
+                    if (subtitlesInfo != null)
                     {
                         foreach (var infoObject in subtitlesInfo)
                         {
