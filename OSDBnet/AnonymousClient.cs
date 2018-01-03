@@ -23,10 +23,10 @@ namespace OSDBnet
             Proxy = proxy;
         }
 
-        internal Task Login(string username, string password, string language, string userAgent)
+        internal async Task Login(string username, string password, string language, string userAgent)
         {
             var tcs = new TaskCompletionSource<bool>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -39,12 +39,13 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task<IList<Subtitle>> SearchSubtitlesFromImdb(string languages, string imdbId, int? season, int? episode)
+        public async Task<IList<Subtitle>> SearchSubtitlesFromImdb(string languages, string imdbId, int? season,
+            int? episode)
         {
             if (string.IsNullOrEmpty(imdbId))
             {
@@ -59,10 +60,10 @@ namespace OSDBnet
                 season = season
             };
 
-            return SearchSubtitlesInternal(request);
+            return await SearchSubtitlesInternal(request);
         }
 
-        public Task<IList<Subtitle>> SearchSubtitlesFromFile(string languages, string filename)
+        public async Task<IList<Subtitle>> SearchSubtitlesFromFile(string languages, string filename)
         {
             if (string.IsNullOrEmpty(filename))
             {
@@ -84,10 +85,10 @@ namespace OSDBnet
             };
 
 
-            return SearchSubtitlesInternal(request);
+            return await SearchSubtitlesInternal(request);
         }
 
-        public Task<IList<Subtitle>> SearchSubtitlesFromImdb(string languages, string imdbId)
+        public async Task<IList<Subtitle>> SearchSubtitlesFromImdb(string languages, string imdbId)
         {
             if (string.IsNullOrEmpty(imdbId))
             {
@@ -99,10 +100,10 @@ namespace OSDBnet
                 imdbid = imdbId
             };
 
-            return SearchSubtitlesInternal(request);
+            return await SearchSubtitlesInternal(request);
         }
 
-        public Task<IList<Subtitle>> SearchSubtitlesFromQuery(string languages, string query, int? season = null,
+        public async Task<IList<Subtitle>> SearchSubtitlesFromQuery(string languages, string query, int? season = null,
             int? episode = null)
         {
             if (string.IsNullOrEmpty(query))
@@ -117,13 +118,13 @@ namespace OSDBnet
                 episode = episode
             };
 
-            return SearchSubtitlesInternal(request);
+            return await SearchSubtitlesInternal(request);
         }
 
-        public Task<long> CheckSubHash(string subHash)
+        public async Task<long> CheckSubHash(string subHash)
         {
             var tcs = new TaskCompletionSource<long>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -143,15 +144,15 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task<IEnumerable<MovieInfo>> CheckMovieHash(string moviehash)
+        public async Task<IEnumerable<MovieInfo>> CheckMovieHash(string moviehash)
         {
             var tcs = new TaskCompletionSource<IEnumerable<MovieInfo>>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -180,15 +181,15 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task<IEnumerable<Language>> GetSubLanguages(string language)
+        public async Task<IEnumerable<Language>> GetSubLanguages(string language)
         {
             var tcs = new TaskCompletionSource<IEnumerable<Language>>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -207,15 +208,15 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task<IEnumerable<Movie>> SearchMoviesOnImdb(string query)
+        public async Task<IEnumerable<Movie>> SearchMoviesOnImdb(string query)
         {
             var tcs = new TaskCompletionSource<IEnumerable<Movie>>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -242,15 +243,15 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task<MovieDetails> GetImdbMovieDetails(string imdbId)
+        public async Task<MovieDetails> GetImdbMovieDetails(string imdbId)
         {
             var tcs = new TaskCompletionSource<MovieDetails>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -264,24 +265,24 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task NoOperation()
+        public async Task NoOperation()
         {
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
                 var response = Proxy.NoOperation(Token);
                 VerifyResponseCode(response);
-            });
+            }).ConfigureAwait(false);
         }
 
-        public Task<IEnumerable<UserComment>> GetComments(string idsubtitle)
+        public async Task<IEnumerable<UserComment>> GetComments(string idsubtitle)
         {
             var tcs = new TaskCompletionSource<IEnumerable<UserComment>>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -315,15 +316,15 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task<string> DetectLanguge(string data)
+        public async Task<string> DetectLanguge(string data)
         {
             var tcs = new TaskCompletionSource<string>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -352,30 +353,30 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
-        public Task ReportWrongMovieHash(string idSubMovieFile)
+        public async Task ReportWrongMovieHash(string idSubMovieFile)
         {
-            return Task.Run(() =>
+            await Task.Run(() =>
             {
                 var response = Proxy.ReportWrongMovieHash(Token, idSubMovieFile);
                 VerifyResponseCode(response);
-            });
+            }).ConfigureAwait(false);
         }
 
-        public Task<string> DownloadSubtitleToPath(string path, Subtitle subtitle, bool remote = true)
+        public async Task<string> DownloadSubtitleToPath(string path, Subtitle subtitle, bool remote = true)
         {
-            return DownloadSubtitleToPath(path, subtitle, null, remote);
+            return await DownloadSubtitleToPath(path, subtitle, null, remote);
         }
 
         public async Task<string> DownloadSubtitleToPath(string path, Subtitle subtitle, string newSubtitleName,
             bool remote = true)
         {
             var destinationfile = Path.Combine(path,
-                (string.IsNullOrEmpty(newSubtitleName)) ? subtitle.SubtitleFileName : newSubtitleName);
+                string.IsNullOrEmpty(newSubtitleName) ? subtitle.SubtitleFileName : newSubtitleName);
             if (remote)
             {
                 if (string.IsNullOrEmpty(path))
@@ -396,13 +397,15 @@ namespace OSDBnet
 
                 using (var client = new HttpClient())
                 {
-                    using (var response = await client.GetAsync(subtitle.SubTitleDownloadLink))
+                    using (var response = await client.GetAsync(subtitle.SubTitleDownloadLink).ConfigureAwait(false))
                     {
                         response.EnsureSuccessStatusCode();
                         using (var content = response.Content)
                         {
-                            var decompressed = await UnZipSubtitleFileToFile(await content.ReadAsByteArrayAsync());
-                            await DecodeAndWriteFile(subtitle.ISO639.ToLower(), destinationfile, decompressed);
+                            var bytes = await content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                            var decompressed = await UnZipSubtitleFileToFile(bytes).ConfigureAwait(false);
+                            await DecodeAndWriteFile(subtitle.ISO639.ToLower(), destinationfile, decompressed)
+                                .ConfigureAwait(false);
                         }
                     }
                 }
@@ -410,16 +413,16 @@ namespace OSDBnet
             else
             {
                 await DecodeAndWriteFile(string.Empty, destinationfile,
-                    File.ReadAllBytes(subtitle.SubTitleDownloadLink.AbsolutePath));
+                    File.ReadAllBytes(subtitle.SubTitleDownloadLink.AbsolutePath)).ConfigureAwait(false);
             }
 
             return destinationfile;
         }
 
-        public Task<IEnumerable<Language>> GetSubLanguages()
+        public async Task<IEnumerable<Language>> GetSubLanguages()
         {
             //get system language
-            return GetSubLanguages("en");
+            return await GetSubLanguages("en");
         }
 
         private static byte[] GzipString(string str)
@@ -551,10 +554,10 @@ namespace OSDBnet
             }
         }
 
-        private Task<IList<Subtitle>> SearchSubtitlesInternal(SearchSubtitlesRequest request)
+        private async Task<IList<Subtitle>> SearchSubtitlesInternal(SearchSubtitlesRequest request)
         {
             var tcs = new TaskCompletionSource<IList<Subtitle>>();
-            Task.Run(() =>
+            await Task.Run(() =>
             {
                 try
                 {
@@ -578,9 +581,9 @@ namespace OSDBnet
                 {
                     tcs.TrySetException(ex);
                 }
-            });
+            }).ConfigureAwait(false);
 
-            return tcs.Task;
+            return await tcs.Task.ConfigureAwait(false);
         }
 
 
@@ -593,7 +596,7 @@ namespace OSDBnet
                 if (strLang == "el") enc = Encoding.GetEncoding("windows-1253");
                 if (strLang == "ar") enc = Encoding.GetEncoding("windows-1256");
                 var str = Encoding.Convert(enc, Encoding.UTF8, decompressed);
-                await subFile.WriteAsync(WebUtility.HtmlDecode(Encoding.UTF8.GetString(str)));
+                await subFile.WriteAsync(WebUtility.HtmlDecode(Encoding.UTF8.GetString(str))).ConfigureAwait(false);
             }
         }
 
@@ -636,7 +639,7 @@ namespace OSDBnet
                             //soak it. We don't want exception on disposing. It's better to let the session timeout.
                         }
                         Token = null;
-                    });
+                    }).ConfigureAwait(false);
                 }
                 Disposed = true;
             }
