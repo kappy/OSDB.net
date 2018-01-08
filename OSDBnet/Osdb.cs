@@ -1,49 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OSDBnet.Backend;
+﻿using System.Globalization;
+using System.Threading.Tasks;
 using CookComputing.XmlRpc;
+using OSDBnet.Backend;
 
-namespace OSDBnet {
-	public static class Osdb {
+namespace OSDBnet
+{
+    public class Osdb
+    {
+        private IOsdb ProxyInstance { get; set; }
 
-		private static IOsdb proxyInstance;
-		private static IOsdb Proxy {
-			get {
-				if (proxyInstance == null) {
-					proxyInstance = XmlRpcProxyGen.Create<IOsdb>();
-				}
-				return proxyInstance;
-			}
-		}
+        private IOsdb Proxy => ProxyInstance ?? (ProxyInstance = XmlRpcProxyGen.Create<IOsdb>());
 
-		public static object ServerInfo() {
-			var response = Proxy.ServerInfo();
-			return response;
-		}
+        public Task<IAnonymousClient> Login(string userAgent)
+        {
+            var systemLanguage = GetSystemLanguage();
+            return Login(systemLanguage, userAgent);
+        }
 
-		public static IAnonymousClient Login(string userAgent) {
-			var systemLanguage = GetSystemLanguage();
-			return Login(systemLanguage, userAgent);
-		}
-
-		public static IAnonymousClient Login(string language, string userAgent) {
-			var client = new AnonymousClient(Proxy);
-			client.Login(string.Empty, string.Empty, language, userAgent);
-			return client;
-		}
-
-        public static IAnonymousClient Login(string username, string password, string language, string userAgent)
+        public async Task<IAnonymousClient> Login(string language, string userAgent)
         {
             var client = new AnonymousClient(Proxy);
-            client.Login(username, password, language, userAgent);
+            await client.Login(string.Empty, string.Empty, language, userAgent);
             return client;
         }
 
-        private static string GetSystemLanguage() {
-			var currentCulture = System.Globalization.CultureInfo.CurrentUICulture;
-			return currentCulture.TwoLetterISOLanguageName.ToLower();
-		}
-	}
+        private string GetSystemLanguage()
+        {
+            var currentCulture = CultureInfo.CurrentUICulture;
+            return currentCulture.TwoLetterISOLanguageName.ToLower(CultureInfo.InvariantCulture);
+        }
+    }
 }

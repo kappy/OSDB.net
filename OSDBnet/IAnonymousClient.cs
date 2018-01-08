@@ -1,25 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace OSDBnet {
-	public interface IAnonymousClient : IDisposable {
-		IList<Subtitle> SearchSubtitlesFromFile(string languages, string filename);
-        IList<Subtitle> SearchSubtitlesFromImdb(string languages, string imdbId);
-		IList<Subtitle> SearchSubtitlesFromQuery(string languages, string query, int? season = null, int? episode = null);
-		string DownloadSubtitleToPath(string path, Subtitle subtitle);
-		string DownloadSubtitleToPath(string path, Subtitle subtitle, string newSubtitleName);
-		long CheckSubHash(string subHash);
-		IEnumerable<MovieInfo> CheckMovieHash(string moviehash);
-		IEnumerable<Language> GetSubLanguages(); 
-		IEnumerable<Language> GetSubLanguages(string language);
-		IEnumerable<Movie> SearchMoviesOnImdb(string query);
-		MovieDetails GetImdbMovieDetails(string imdbId);
-		//Should this be exposed?
-		void NoOperation();
-		IEnumerable<UserComment> GetComments(string idSubtitle);
-		string DetectLanguge(string data);
-		void ReportWrongMovieHash(string idSubMovieFile);
-	}
+namespace OSDBnet
+{
+    public interface IAnonymousClient : IDisposable
+    {
+        Task<IList<Subtitle>> SearchSubtitlesFromImdb(string languages, string imdbId, int? season, int? episode);
+        Task<IEnumerable<Language>> GetSubLanguages();
+        Task<IList<Subtitle>> SearchSubtitlesFromFile(string languages, string filename);
+        Task<IList<Subtitle>> SearchSubtitlesFromImdb(string languages, string imdbId);
+        Task<IList<Subtitle>> SearchSubtitlesFromQuery(string languages, string query, int? season = null, int? episode = null);
+        Task<string> DownloadSubtitleToPath(string path, Subtitle subtitle, bool remote = true);
+        Task<string> DownloadSubtitleToPath(string path, Subtitle subtitle, string newSubtitleName, bool remote = true);
+        Task<long> CheckSubHash(string subHash);
+        Task<IEnumerable<MovieInfo>> CheckMovieHash(string moviehash);
+        Task<IEnumerable<Language>> GetSubLanguages(string language);
+        Task<IEnumerable<Movie>> SearchMoviesOnImdb(string query);
+        Task<MovieDetails> GetImdbMovieDetails(string imdbId);
+        //Should this be exposed?
+        Task NoOperation();
+        Task<IEnumerable<UserComment>> GetComments(string idSubtitle);
+        Task<string> DetectLanguge(string data);
+        Task ReportWrongMovieHash(string idSubMovieFile);
+    }
 }
