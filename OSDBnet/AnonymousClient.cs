@@ -454,7 +454,7 @@ namespace OSDBnet
                 LanguageName = info.LanguageName,
                 Rating = info.SubRating,
                 Bad = info.SubBad,
-
+                ISO639 = info.ISO639,
                 ImdbId = info.IDMovieImdb,
                 MovieId = info.IDMovie,
                 MovieName = info.MovieName,
